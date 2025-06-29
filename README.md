@@ -1,50 +1,187 @@
-# Welcome to your Expo app 👋
+# CognifAI 🧠✨
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An intelligent learning platform powered by AI and cognitive science. CognifAI combines advanced retrieval-based learning methods with adaptive AI to create personalized learning experiences that maximize retention and understanding.
 
-## Get started
+## Features
 
-1. Install dependencies
+- 📚 Create and manage learning topics
+- 🤖 AI-generated questions using Google Gemini 2.5 Flash
+- 🧠 Spaced repetition system (immediate + 5 hours later)
+- 📊 Progress tracking and analytics
+- 🔔 Smart notifications for review sessions
+- 🔥 Real-time database with Firebase Firestore
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+- **Frontend**: Expo (React Native)
+- **Database**: Firebase Firestore
+- **AI**: Google Gemini 2.5 Flash API
+- **Authentication**: Firebase Auth (ready for implementation)
+- **Notifications**: Expo Notifications
 
-   ```bash
-   npx expo start
-   ```
+## Setup Instructions
 
-In the output, you'll find options to open the app in a
+### 1. Prerequisites
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Node.js 18 or later
+- Expo CLI (`npm install -g @expo/cli`)
+- Firebase CLI (`npm install -g firebase-tools`)
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+### 2. Installation
 
 ```bash
-npm run reset-project
+# Clone the repository
+git clone <your-repo-url>
+cd cognifai
+
+# Install dependencies
+npm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 3. Firebase Configuration
 
-## Learn more
+The app is already configured with Firebase project `education-f59b8`. The configuration includes:
 
-To learn more about developing your project with Expo, look at the following resources:
+- ✅ Firestore database with proper indexes
+- ✅ Security rules configured
+- ✅ Web app configuration
+- ✅ Service account for admin operations
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 4. Environment Variables
 
-## Join the community
+Copy the example environment file and configure your API keys:
 
-Join our community of developers creating universal apps.
+```bash
+cp .env.example .env
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Edit `.env` and add your Google Gemini API key:
+
+```env
+EXPO_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+### 5. Test Firebase Connection
+
+```bash
+npm run test-firebase
+```
+
+This will verify that your Firebase configuration is working correctly.
+
+## Development
+
+### Start the development server
+
+```bash
+npm start
+```
+
+### Available Scripts
+
+- `npm start` - Start Expo development server
+- `npm run android` - Run on Android emulator
+- `npm run ios` - Run on iOS simulator
+- `npm run web` - Run in web browser
+- `npm run test-firebase` - Test Firebase connection
+- `npm run test-gemini` - Test Gemini AI integration
+- `npm run test-rn-firebase` - Test React Native Firebase config
+- `npm run test-all` - Run all tests
+- `npm run firebase-deploy` - Deploy all Firebase resources
+- `npm run firebase-deploy-rules` - Deploy only Firestore rules
+- `npm run firebase-deploy-indexes` - Deploy only Firestore indexes
+
+## Firebase Structure
+
+### Collections
+
+- **topics**: User learning topics
+  - `userId`: User identifier
+  - `title`: Topic title
+  - `content`: Topic content
+  - `summary`: AI-generated summary
+  - `createdAt`: Creation timestamp
+  - `recallSchedule`: Spaced repetition tracking
+
+- **questions**: AI-generated questions for topics
+  - `topicId`: Reference to topic
+  - `question`: Question text
+  - `options`: Multiple choice options
+  - `correctAnswer`: Correct answer
+  - `explanation`: Answer explanation
+
+- **recallSessions**: User quiz sessions
+  - `userId`: User identifier
+  - `topicId`: Reference to topic
+  - `questionsCount`: Number of questions
+  - `correctAnswers`: Number correct
+  - `score`: Percentage score
+  - `sessionType`: 'immediate' or 'spaced'
+
+### Security Rules
+
+The app uses Firebase security rules that:
+- Allow users to access only their own data
+- Validate data structure and ownership
+- Include development mode for testing without auth
+
+## Deployment
+
+### Firebase Deployment
+
+```bash
+# Deploy all Firebase resources
+npm run firebase-deploy
+
+# Deploy only specific resources
+npm run firebase-deploy-rules
+npm run firebase-deploy-indexes
+```
+
+### App Deployment
+
+Follow Expo's deployment guides for your target platforms:
+- [iOS App Store](https://docs.expo.dev/submit/ios/)
+- [Google Play Store](https://docs.expo.dev/submit/android/)
+- [Web Hosting](https://docs.expo.dev/distribution/publishing-websites/)
+
+## Troubleshooting
+
+### React Native Issues
+
+If you encounter Firebase Auth warnings or errors when running on Android/iOS:
+
+1. **AsyncStorage Warning** (Safe to ignore):
+   ```
+   @firebase/auth: Auth (11.9.0): You are initializing Firebase Auth for React Native without providing AsyncStorage.
+   ```
+   This warning is expected and won't break functionality.
+
+2. **Component auth not registered** - Fixed in current configuration
+
+3. **Clear Metro cache** if you have issues:
+   ```bash
+   npx expo start --clear
+   ```
+
+See `REACT_NATIVE_FIXES.md` for detailed troubleshooting.
+
+### Testing
+
+Run comprehensive tests:
+```bash
+npm run test-all
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly (`npm run test-all`)
+5. Submit a pull request
+
+## License
+
+This project is licensed under the MIT License.
+# no-hesi
