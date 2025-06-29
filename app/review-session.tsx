@@ -27,12 +27,42 @@ export default function ReviewSessionScreen() {
   const userId = 'demo-user';
 
   useEffect(() => {
-    loadReviewQuestions();
+    const initializeSession = async () => {
+      try {
+        setLoading(true);
+
+        // Get questions for review
+        const progressItems = await spacedRepetitionService.getQuestionsForReview(
+          userId,
+          sessionType,
+          20
+        );
+
+        // Load question details
+        const questionsWithDetails = await Promise.all(
+          progressItems.map(async (progress) => {
+            const question = await questionsService.getQuestion(progress.questionId);
+            return { ...progress, question: question! };
+          })
+        );
+
+        setQuestions(questionsWithDetails.filter(q => q.question));
+        setSessionStartTime(new Date());
+        setQuestionStartTime(new Date());
+      } catch (error) {
+        console.error('Error loading review questions:', error);
+        Alert.alert('Error', 'Failed to load review questions');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeSession();
 
     // Handle back button
     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
     return () => backHandler.remove();
-  }, [loadReviewQuestions]);
+  }, [userId, sessionType]);
 
   const handleBackPress = () => {
     Alert.alert(
@@ -46,35 +76,7 @@ export default function ReviewSessionScreen() {
     return true;
   };
 
-  const loadReviewQuestions = React.useCallback(async () => {
-    try {
-      setLoading(true);
 
-      // Get questions for review
-      const progressItems = await spacedRepetitionService.getQuestionsForReview(
-        userId,
-        sessionType,
-        20
-      );
-
-      // Load question details
-      const questionsWithDetails = await Promise.all(
-        progressItems.map(async (progress) => {
-          const question = await questionsService.getQuestion(progress.questionId);
-          return { ...progress, question: question! };
-        })
-      );
-
-      setQuestions(questionsWithDetails.filter(q => q.question));
-      setSessionStartTime(new Date());
-      setQuestionStartTime(new Date());
-    } catch (error) {
-      console.error('Error loading review questions:', error);
-      Alert.alert('Error', 'Failed to load review questions');
-    } finally {
-      setLoading(false);
-    }
-  }, [userId, sessionType]);
 
   const handleAnswer = async (performance: 'easy' | 'good' | 'hard' | 'again') => {
     if (currentIndex >= questions.length) return;

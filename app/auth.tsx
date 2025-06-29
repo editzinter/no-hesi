@@ -51,7 +51,7 @@ export default function AuthScreen() {
       } else {
         Alert.alert('Error', result.error || 'Authentication failed');
       }
-    } catch (err) {
+    } catch {
       Alert.alert('Error', 'An unexpected error occurred');
     } finally {
       setLoading(false);
@@ -79,7 +79,7 @@ export default function AuthScreen() {
     // For development - skip auth and go directly to app
     try {
       router.replace('/(tabs)');
-    } catch (err) {
+    } catch {
       Alert.alert('Error', 'Failed to enter demo mode');
     } finally {
       setLoading(false);

@@ -220,7 +220,7 @@ export class NotificationService {
         },
       });
 
-      console.log(`Scheduled notification: ${schedule.title} at ${schedule.scheduledTime}`);
+      // Notification scheduled successfully
     } catch (error) {
       console.error('Failed to schedule notification:', error);
     }
@@ -244,7 +244,7 @@ export class NotificationService {
         for (const notificationId of notificationsToCancel) {
           await Notifications.cancelScheduledNotificationAsync(notificationId);
         }
-        console.log(`Cancelled ${notificationsToCancel.length} notifications with tag: ${tag}`);
+        // Notifications cancelled successfully
       }
     } catch (error) {
       console.error('Failed to cancel notifications:', error);
@@ -257,7 +257,7 @@ export class NotificationService {
   async cancelAllNotifications(): Promise<void> {
     try {
       await Notifications.cancelAllScheduledNotificationsAsync();
-      console.log('Cancelled all scheduled notifications');
+      // All notifications cancelled successfully
     } catch (error) {
       console.error('Failed to cancel all notifications:', error);
     }
